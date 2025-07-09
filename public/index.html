@@ -1,0 +1,159 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio/Video to Text Translator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="container glass-container">
+    <h1 class="text-center mb-4"><i class="fas fa-language me-2"></i>Audio/Video to Text Translator</h1>
+
+    <div class="upload-box text-center p-4 mb-4">
+      <input type="file" id="fileInput" accept="audio/*,video/*" class="d-none">
+      <label for="fileInput" class="upload-btn">
+        <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+        <h4>Upload Audio/Video</h4>
+        <p class="text-muted">Supports MP3, WAV, MP4, AVI</p>
+      </label>
+      <div class="progress mt-3 d-none">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%;"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="result-box">
+          <h3><i class="fas fa-comment me-2"></i>Original Text</h3>
+          <div id="originalText" class="text-output"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="result-box">
+          <h3><i class="fas fa-exchange-alt me-2"></i>Translations</h3>
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-bs-toggle="tab" href="#urdu">Urdu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#arabic">Arabic</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div id="urdu" class="tab-pane fade show active text-output"></div>
+            <div id="arabic" class="tab-pane fade text-output"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      document.querySelector('.progress').classList.remove('d-none');
+      document.getElementById('originalText').innerText = 'Processing...';
+      document.getElementById('urdu').innerText = '';
+      document.getElementById('arabic').innerText = '';
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.querySelector('.progress').classList.add('d-none');
+          document.getElementById('originalText').innerText = data.originalText;
+          document.getElementById('urdu').innerText = data.translations.urdu;
+          document.getElementById('arabic').innerText = data.translations.arabic;
+        })
+        .catch(err => {
+          console.error(err);
+          document.querySelector('.progress').classList.add('d-none');
+          document.getElementById('originalText').innerText = 'Error occurred while processing.';
+        });
+    });
+  </script>
+</body>
+</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urdu Audio to Text Transcription</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="container glass-container">
+    <h1 class="text-center mb-4">
+      <i class="fas fa-language me-2"></i>Urdu Audio to Text Transcription
+    </h1>
+
+    <div class="upload-box text-center p-4 mb-4">
+      <input type="file" id="fileInput" accept="audio/*,video/*" class="d-none">
+      <label for="fileInput" class="upload-btn">
+        <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+        <h4>Upload Audio/Video</h4>
+        <p class="text-muted">Supports MP3, WAV, MP4, AVI</p>
+      </label>
+      <div class="progress mt-3 d-none">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%;"></div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="result-box">
+          <h3><i class="fas fa-file-alt me-2"></i>Transcribed Urdu Text</h3>
+          <div id="urdu" class="text-output p-3 border rounded" style="min-height: 100px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      document.querySelector('.progress').classList.remove('d-none');
+      document.getElementById('urdu').innerText = 'Processing...';
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.querySelector('.progress').classList.add('d-none');
+          document.getElementById('urdu').innerText = data.originalText || 'No text returned.';
+        })
+        .catch(err => {
+          console.error(err);
+          document.querySelector('.progress').classList.add('d-none');
+          document.getElementById('urdu').innerText = 'Error occurred while processing.';
+        });
+    });
+  </script>
+</body>
+</html>
+
+
